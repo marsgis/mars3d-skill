@@ -1,5 +1,5 @@
 ---
-name: mars3d-api
+name: mars3d-skill
 description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用，使用 Mars3D 开发者中心 和 官方API。适用于任务提到 Mars3D、mars3d、mars3d.Map、Cesium 或 mars3d-cesium 集成、安装或集成报错、Vue 或 ES5 Mars3D 项目、Mars3D Vue widget architecture、widget-store.ts、useLifecycle(mapWork)、map.ts widgets、config.json、map scene 、basemaps、terrain、tile layers、graphics、3D Tiles、glTF或 坐标转化、events、camera、controls、effects、量算、ArcGIS services、WebGL，或 Mars3D 常见问题。"
 ---
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mars3D Developer Docs"
+  short_description: "Build, integrate, and debug Mars3D apps, including Vue widgets."
+  default_prompt: "Use $mars3d-skill to build, integrate, or debug a Mars3D map feature, Vue widget flow, or page-map interaction using the official Developer Center and API docs."
