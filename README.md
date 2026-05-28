@@ -1,13 +1,8 @@
-# Mars3D Skill
 
-这是一个用于 AI coding agent 的 Mars3D 专用 skill，面向 Mars3D Web GIS 项目的开发、集成、调试和经验复用。
+## 什么是 mars3d-skill？
+mars3d-skill是专门为Mars3D平台使用打造的 AI 辅助技能包，能帮你解决项目开发、集成、调试中的各类问题（比如地图空白、打包失败、API 使用错误等），尤其适配 Vue/ES5 技术栈和Vue通用项目模版(widget 机制)，让 AI 生成的代码更贴合 Mars3D 官方规范和工程最佳实践。
 
-它会帮助 Codex 或 Claude Code 在处理 Mars3D 项目时优先读取本地项目代码、已安装 SDK 类型声明、Mars3D 官方文档和仓库内沉淀的工程经验，尤其适合 Vue/ES5 技术栈、Mars3D widget 机制、安装集成问题和常见 API 使用错误。
-
-当前skill还在逐步完善中，如果当前skill不满足您的需求，也可以自行修改内容，后续我们会添加更多内容，也期待您的加入。
-
-## 主要能力
-
+### 主要能力
 - 分析和修改 Mars3D 项目代码。
 - 排查 npm、静态文件、CDN 等 Mars3D 集成问题。
 - 处理 `mars3d-cesium`、Cesium 资源路径、地图空白、打包失败等常见问题。
@@ -16,186 +11,177 @@
 - 记录 Vue 工程实践：页面数据只保存业务状态和 graphic id，不把 Mars3D/Cesium 对象放进深度响应式状态。
 - 提供常用代码模式，例如 `GraphicLayer`、`startDraw`、`centerPoint`、layer cleanup 等。
 
-## 目录结构
+### 主要文件及目录说明
+- `./SKILL.md` 是 skill 入口，负责描述触发条件、工作流程和 reference 选择规则。
+- `/references/` 中存放按需加载的经验文档。文档采用“中文经验说明 + 英文 API 术语”的形式，保留 `Mars3D`、`GraphicLayer`、`startDraw`、`centerPoint`、`widget-store.ts` 等关键术语，便于和代码、类型声明、官方 API 对齐。
 
-```text
-mars3d-skill/
-├── README.md
-├── images
-└── mars3d-skill(下载这个文件夹放到项目中即可使用)/
-    ├── SKILL.md
-    ├── agents/
-    │   └── openai.yaml
-    └── references/
-        ├── api-errors.md
-        ├── api-navigation.md
-        ├── coding-patterns.md
-        ├── integration.md
-        ├── integration-cdn.md
-        ├── integration-npm.md
-        ├── integration-static.md
-        ├── vue-engineering-practices.md
-        └── widget-patterns.md
+ 
+
+## 准备工作
+在开始使用前，请先确认：
+1. 你已经有一个 Mars3D 项目，下面我们已 [mars3d-vue-project项目](https://gitee.com/marsgis/mars3d-vue-project)为例；
+2. 已安装 Codex 或 Claude Code（二选一即可，下文会分别讲解）；
+3. 网络正常，能下载 GitHub/Gitee 上的代码。
+
+### 下载代码
+- [Github](https://github.com/marsgis/mars3d-skill)
+
+```
+git clone https://github.com/marsgis/mars3d-skill.git
 ```
 
-内层 `mars3d-skill/SKILL.md` 是 skill 入口，负责描述触发条件、工作流程和 reference 选择规则。
+- [Gitee](https://gitee.com/marsgis/mars3d-skill)：国内码云，下载速度快些。
 
-内层 `mars3d-skill/references/` 中存放按需加载的经验文档。文档采用“中文经验说明 + 英文 API 术语”的形式，保留 `Mars3D`、`GraphicLayer`、`startDraw`、`centerPoint`、`widget-store.ts` 等关键术语，便于和代码、类型声明、官方 API 对齐。
-
-## 在 Codex 中按项目使用
-
-这部分介绍的是“在目标 Mars3D 项目根路径使用这个 skill”，不是安装到用户全局 skill 目录。Codex 当前推荐的项目级 skill 目录是目标项目根目录里的 `.agents/skills`，例如 `E:\your-mars3d-project\.agents\skills`。
-
-skill 的调用名来自 `SKILL.md` 里的 `name: mars3d-skill`，所以显式调用时使用 `$mars3d-skill`。
-
-### 1. 复制到项目根目录的 `.agents/skills`
-
-目标结构应类似：
-
-```text
-E:\your-mars3d-project\.agents\skills\mars3d-skill\SKILL.md
-E:\your-mars3d-project\.agents\skills\mars3d-skill\references\...
-E:\your-mars3d-project\.agents\skills\mars3d-skill\agents\openai.yaml
+```
+git clone https://gitee.com/marsgis/mars3d-skill.git
 ```
 
-这里的 `.agents/skills` 是 Codex 扫描项目级 skills 的目录；skill 内部的 `agents/openai.yaml` 是 Codex app 的可选展示元数据，不是另一个项目配置目录。
 
-这里使用[项目模板](https://gitee.com/marsgis/mars3d-vue-project)举例
-复制过后的项目结构如下
+  
 
-![codex使用项目中的skill](./images/project-codex-skill.png)
+## 方式一：在 Codex 中使用
+Codex 是 OpenAI 推出的 AI 编程智能体，前身是 GitHub Copilot 底层代码模型，现在是面向软件工程的全流程自动化助手。
+- [Codex skills 介绍](https://developers.openai.com/codex/skills)
 
-### 2. 在项目根目录添加 `AGENTS.md` (可选)
 
-`AGENTS.md` 不是 skill 安装目录，它只是给 Codex 的项目说明。建议在目标 Mars3D 项目根路径中新建或更新 `AGENTS.md`：
+### 一. 把 skill 复制到项目指定目录
 
-```md
-# AGENTS.md
+1. 找到你的 Mars3D 项目根目录（比如 `D:\mars3d-vue-project\`）；
 
-## Mars3D 项目约定
+2. 在项目根目录下，依次新建文件夹：`.agents` → `skills`（注意 `.agents` 前面有个点）,完成后目录为`D:\mars3d-vue-project\.agents\skills\`；
 
-- 本项目是 Mars3D Web GIS 项目。
-- 处理 Mars3D、mars3d.Map、config.json、GraphicLayer、widget、useLifecycle(mapWork)、mars3d-cesium、地图空白、安装集成、添加 Mars3D 地图相关功能和 API 参数问题时，优先使用本项目 `.agents/skills/mars3d-skill` 中的 `$mars3d-skill`。
-- 修改地图联动功能前，先判断项目是否使用 Mars3D Vue widget 机制。
-- 在 Vue 项目中，不要把 Mars3D/Cesium 对象实例放进深度响应式状态；页面状态只保存业务字段和 graphic id。
-- 绘制点后读取坐标时，优先使用 `graphic.centerPoint`，不要假设 `graphic.position.lng` 或 `graphic.position.lat` 存在。
-```
+3. 把下载好的 `mars3d-skill` 文件夹（里面包含SKILL.md、references等），完整复制到 `\.agents\skills\` 目录下。
 
-### 3. 从项目根路径启动 Codex
+最终你的项目结构应该是这样（对照看，确保没错）：
 
-启动后，Mars3D 相关任务可以显式调用。如果 `$mars3d-skill` 没出现在 skill 选择器里，重启 Codex，并确认当前工作目录在目标项目内。
+::: file-tree
 
-```text
-$mars3d-skill 帮我分析这个 Mars3D Vue 项目是否使用 widget 机制
-```
+- D:\mars3d-vue-project\
+  - .agents/
+    - skills/
+      - mars3d-skill/
+        - SKILL.md
+        - agents/
+          - openai.yaml
+        - references/
+          - api-errors.md
+          - integration.md
+          - ...（其他参考文档）
+  - src/
+  - package.json
+  - ...（项目其他文件）
+:::
 
-```text
-$mars3d-skill 帮我排查这个项目为什么 npm run build 后地图空白
-```
 
-```text
+
+### 二. 启动 Codex 并使用 skill
+1. 打开命令行工具，切换到你的 Mars3D 项目根目录（比如执行 `cd D:\mars3d-vue-project\`）；
+2. 启动 Codex（按 Codex 官方方式启动，比如双击 Codex 客户端，或执行启动命令）；
+3. 在 Codex 的输入框中，以 `$mars3d-skill` 开头，输入一个测试需求看看功能是否正常，比如：
+
+    ```Plain Text
+    $mars3d-skill 帮我分析这个 Mars3D Vue 项目是否使用 widget 机制
+    ```
+>Codex的调用名`$mars3d-skill`来自 `SKILL.md` 里的 `name: mars3d-skill`
+
+4. 如果 skill 没出现在选择器里，重启 Codex 即可。
+  
+![codex使用步骤](http://mars3d.cn/docs/img/guide/skill-codex-start.jpg)
+
+
+### 三. 根据实际需求输入skill指令
+
+后续更加您实际需求，按需输入skill指令，比如：
+
+```Plain Text
+$mars3d-skill 帮我排查项目 npm run build 后地图空白的问题
+$mars3d-skill 帮我新增一个 Mars3D 按钮，点击后在地图上标绘点并记录到表
 $mars3d-skill 帮我新增一个 Mars3D widget，点击按钮后在地图上绘制点，并把点记录同步到表格
 ```
 
-实际使用如下
-![codex中使用skill](./images/project-codex-use-skill.png)
 
 
-## 在 Claude Code 中使用
 
-Claude Code 支持项目级 skills。推荐把这个 skill 放到目标 Mars3D 项目根目录的 `.claude/skills/mars3d-skill/` 下。这样该 skill 只对当前项目生效，也方便随项目提交给团队。
+## 方式二：在 Claude Code 中使用
+Claude Code 是 Anthropic 公司基于 Claude 大模型打造的 AI 编程智能体，主打深度理解项目、终端原生工作流。
+- [Claude Code skills 介绍](https://docs.claude.com/en/docs/claude-code/skills)
 
-### 1. 复制到项目级 `.claude/skills`
+### 一. 把 skill 复制到项目指定目录
+1. 找到你的 Mars3D 项目根目录（比如 `D:\mars3d-vue-project\`）；
 
-目标结构应类似：
+2. 在项目根目录下，依次新建文件夹：`.claude` → `skills`（注意 `.claude` 前面有个点）,完成后目录为`D:\mars3d-vue-project\.claude\skills\`；
 
-```text
-E:\your-mars3d-project\.claude\skills\mars3d-skill\SKILL.md
-E:\your-mars3d-project\.claude\skills\mars3d-skill\references\...
+3. 把下载好的 `mars3d-skill` 文件夹，完整复制到 `.claude/skills` 目录下。
+
+最终你的项目结构应该是这样：
+::: file-tree
+
+- D:\mars3d-vue-project\
+  - .claude/
+    - skills/
+      - mars3d-skill/
+        - SKILL.md
+        - agents/
+          - openai.yaml
+        - references/
+          - api-errors.md
+          - integration.md
+          - ...（其他参考文档）
+  - src/
+  - package.json
+  - ...（项目其他文件）
+:::
+
+
+
+### 二. 启动 Claude Code 并使用 skill
+1. 打开 Claude Code，并确保当前工作目录是你的 Mars3D 项目根目录；
+2. 在输入框中，以 `/mars3d-skill` 开头输入一个测试需求看看功能是否正常，比如：
+    ```Plain Text
+    /mars3d-skill 帮我分析这个 Mars3D Vue 项目是否使用 widget 机制
+    ```
+> Claude Code 的调用名来自skill目录名
+
+3. Claude Code 也会根据你的需求自动加载该 skill，无需手动选择。
+
+![claude使用skill流程](http://mars3d.cn/docs/img/guide/skill-claude-start.jpg)
+
+ 
+### 三. 根据实际需求输入skill指令
+
+后续更加您实际需求，按需输入skill指令，比如：
+
+```Plain Text
+/mars3d-skill 帮我判断项目是否使用 Mars3D Vue widget 机制
+/mars3d-skill 帮我写一个按钮，点击后在地图上标绘点，表格记录并支持删除
 ```
+ 
 
-这里使用[项目模板](https://gitee.com/marsgis/mars3d-vue-project)举例
-复制过后的项目结构如下
+### （可选）快捷安装方式
+如果您不想上面的一步步操作，也你可以让 Claude Code 帮助您安装，参考下面图片：
 
-![claude使用skill](./images/project-claude-skill-structure.png)
-
-Claude Code 的命令名来自 skill 目录名，所以这个项目里可以用：
-
-```text
-/mars3d-skill 帮我判断这个项目是否使用 Mars3D Vue widget 机制
-```
-
-Claude Code 也会根据 `SKILL.md` 的 `description` 在相关任务中自动加载该 skill。
-
-实际使用如下
-![claude使用skill流程](./images/project-claude-use-skill.png)
-
-### 2. 在项目根目录添加 `CLAUDE.md`（可选）
-
-如果希望 Claude Code 每次进入项目时都知道这是 Mars3D 项目，可以在项目根目录添加 `CLAUDE.md`：
-
-```md
-# CLAUDE.md
-
-本项目是 Mars3D Web GIS 项目。
-
-处理 Mars3D、mars3d.Map、config.json、GraphicLayer、widget、useLifecycle(mapWork)、mars3d-cesium、地图空白、安装集成和 API 参数问题时，优先使用 `/mars3d-skill` skill。
-
-重要约定：
-
-- 修改地图联动功能前，先判断项目是否使用 Mars3D Vue widget 机制。
-- Vue 页面状态只保存业务字段和 graphic id，不保存 Mars3D/Cesium 对象实例。
-- 绘制点后读取坐标时，优先使用 `graphic.centerPoint`。
-```
-
-项目级 `CLAUDE.md` 适合放团队共享的项目规则；个人偏好可以放到 `CLAUDE.local.md`。
-
-## 最简单的方式
-
-让Claude Code 安装，还是和上面一样进入项目的 claude 界面(可能会在电脑某个地方克隆这个skill仓库)，一直点击确定就可以了
-![agent-install](./images/agent-install.png) 
+![agent-install](http://mars3d.cn/docs/img/guide/skill-claude-autoinstall.jpg) 
 
 
-## 选择建议
 
-- Codex 按项目使用：复制到目标项目本地 `.agents/skills/mars3d-skill`，必要时添加 `AGENTS.md`，从项目根路径启动 Codex。
-- Claude Code 项目内使用：复制到项目 `.claude/skills/mars3d-skill`，必要时添加 `CLAUDE.md`。
-- 不建议只复制 `SKILL.md`，因为它会按任务加载 `references/` 中的经验文档。
+## 常见问题解答（小白必看）
+ 
+### Q1：复制文件夹后，AI 没识别到 skill 怎么办？
+- 检查文件夹路径是否正确（比如 Codex 是 `.agents/skills/mars3d-skill`，Claude 是 `.claude/skills/mars3d-skill`）；
+- 确保 `mars3d-skill` 文件夹里包含 `SKILL.md` 和 `references` 目录，不要只复制单个文件；
+- 重启 Codex/Claude Code，并重进项目目录。
 
-## 适用场景
 
-- Mars3D 项目功能开发。
-- Mars3D Vue widget 架构改造。
-- Mars3D 安装集成和打包部署排查。
-- API 参数无效、方法调用报错、类名或枚举名不确定。
-- 图层、矢量对象、绘制编辑、坐标转换、地图事件、相机控制等常见 Web GIS 功能。
+### Q2：使用 skill 会额外收费吗？
+- skill 本身免费，AI 平台（Codex/Claude Code）会按 token 消耗计费（比如 Claude Code 用 deepseek-v4-flash 模型，三次测试仅花费 0.22 元，费用受需求难度影响）。
 
-## 有无skill的对比
-这里使用[项目模板](https://gitee.com/marsgis/mars3d-vue-project)举例
-下面是我使用claude code v2.1.152  模型使用的deepseek-v4-flash 相同的提示词
-```
-E:\test\mars3d-vue-project-master\src\widgets\basic\toolbar\index.vue 在这个文件中的这段代码
-    children: [
-        { name: "坐标定位", icon: "local", widget: "location-point" }
-    ]，加上一个按钮，点击之后会出现一个弹窗，这个弹窗中上面是一个按钮，下面是一个表格。点击按钮之后可以在地图上标绘
-  点，每标绘一个点，就会在表格中增加这个点的记录，每个记录后面有一个删除按钮，点击删除，记录从表格中删除同时地图上的点
-  也会被删除
-```
+![价格](http://mars3d.cn/docs/img/guide/skill-token-price.jpg)
 
-- 不使用skill
 
-可以看见，这里的id是自己生成的，并不是矢量数据自己的id，生成之后也是直接通过map.graphicLayer.addGraphic,而不是新建一个graphicLayer,也没有使用startDraw
-![不使用skill](./images/no-use-skill.png)
+### Q3：skill 能解决哪些问题？
+- 排查 npm 安装、CDN / 静态文件集成问题；
+- 解决地图空白、打包失败、API 调用报错；
+- 开发 Mars3D Vue widget、标绘点 / 线 / 面、图层管理等功能；
+- 规范 Vue 项目中 Mars3D 对象的使用方式（避免响应式坑）。
 
-- 使用skill
-
-提示词前面加上 "/mars3d-skill 使用这个skill，"
-![使用skill](./images/use-skill.png)
-
-对比可以发现，虽然功能都实现了，但是使用skill生成的代码，更符合我想要的样子
-
-## token消耗
-这里使用的是claude code v2.1.152  模型使用的deepseek-v4-flash。算上第一次测试，加上后面两次写案例截图，三次相同的提示词总共花费0.22元(实际费用会受到需求难度，提示词的影响)
-
-![价格](./images/token-price.png)
 
