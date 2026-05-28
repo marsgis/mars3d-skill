@@ -72,6 +72,89 @@ rg -n "new mars3d\.graphic\.PolylineEntity" "E:\temp\mars3d-vue-example"
 
 9. 整理完成后，不要直接把全部示例强行加载进上下文。先把整理好的内容、来源路径和精简后的上下文告诉用户大小，让用户判断是否需要加载进入上下文。
 
+## 当直接示例不存在时：从其他 API 借用法模式组合生成测试代码
+
+如果通过搜索目标 API（如 `new mars3d.graphic.Satellite`）没有找到直接使用了目标特性（如 `SampledPositionProperty`）的示例，需要进行交叉搜索和组合推导。
+
+### 组合推导流程
+
+**Step 1 — 搜索目标特性本身**
+
+不限定在目标 API 中，而是全文搜索特性名称，例如：
+
+```powershell
+rg -n "SampledPositionProperty" "示例仓库路径\src"
+```
+
+这会找出所有使用该特性的示例，不论它们属于哪个 API。
+
+**Step 2 — 从其他 API 示例中提取特性用法模式**
+
+查看搜索结果中命中的文件，例如 `entity/property/map.js` 中 `demoSampledPositionProperty()` 函数，提取该特性的通用用法模式：
+
+- 是否需要设置 `map.clock.currentTime` 到采样点时间范围内
+- 是构造时传入 `position: property` 还是用 setter `xxx.position = property`
+- 是否有其他前置条件（如 `clockAnimate: true`、`timeline: true`）
+
+**Step 3 — 查目标 API 文档找到等价属性**
+
+查看目标 API 文档，确认它是否有同名的属性可以承接该特性。例如：
+
+- `SampledPositionProperty` 是用于动态位置的 → 目标类是否有 `position` 属性或 `property` 属性
+- 从 `http://mars3d.cn/api/Satellite.html` 可查到 `Satellite` 有 `property` 属性（动态位置坐标），类型为 `Cesium.SampledPositionProperty`
+
+**Step 4 — 组合生成测试代码**
+
+将从 Step 2 提取的"特性用法模式"和从 Step 3 提取的"目标 API 属性"组合起来：
+
+```js
+// 模式来自 entity/property/map.js
+map.clock.currentTime = Cesium.JulianDate.fromDate(new Date("采样起始时间"))
+
+// 构造时先不传 position
+const graphic = new mars3d.graphic.TargetClass({
+  ... // 其他参数
+})
+graphicLayer.addGraphic(graphic)
+
+// 属性来自 Satellite API 文档的 property 属性
+graphic.property = yourProperty
+```
+
+**Step 5 — 告诉用户测试代码的来源和审查**
+
+将生成的测试代码交给用户前，需要说明：
+- 特性用法来自哪个示例（路径 + 函数名）
+- 目标属性来自哪个 API 文档
+- 这是组合推导的结果，未经官方示例直接验证
+
+### 推导示例
+
+用户问题："`const weixin = new mars3d.graphic.Satellite({ position: property })` 不生效，其中 property 是 `SampledPositionProperty`"
+
+推导过程：
+1. 搜索 `new mars3d.graphic.Satellite` → 16 个结果，但没有直接使用 `SampledPositionProperty` 的
+2. 搜索 `SampledPositionProperty` → 找到 `entity/property/map.js`，其中 `demoSampledPositionProperty()` 显示：需要先设置 `map.clock.currentTime`，然后用 setter `marsBox.position = property`
+3. 查 `Satellite` API 文档 → 有 `property` 属性（`Cesium.SampledPositionProperty`）
+4. 组合：先设置时钟，创建 Satellite（构造时不传 position），再 `weixin.property = property`
+
+生成的测试代码：
+
+```js
+map.clock.currentTime = Cesium.JulianDate.fromDate(new Date("2021-01-01 19:55:00"))
+
+const weixin = new mars3d.graphic.Satellite({
+  name: "自定义轨道",
+  model: { url: "...", scale: 100, minimumPixelSize: 90 },
+  label: { ... },
+  cone: { ... },
+  path: { ... }
+})
+graphicLayer.addGraphic(weixin)
+
+weixin.property = property
+```
+
 ## 排查"参数问题"还是"API本身问题"：将含有逻辑的代码转换为不含逻辑的代码
 
 当 API 报错或表现异常时，需要先判断是 API 本身的 bug，还是用户传入的参数、变量、业务流程导致的问题。方法是将用户含有逻辑的代码转换为不含逻辑的硬编码代码，只验证目标 API 和目标属性本身。
