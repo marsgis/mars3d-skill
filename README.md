@@ -36,6 +36,20 @@ git clone https://github.com/marsgis/mars3d-skill.git
 git clone https://gitee.com/marsgis/mars3d-skill.git
 ```
 
+下面2个方式的对比：
+
+|对比项|Codex（OpenAI）|Claude Code（Anthropic）|
+|---|---|---|
+|**skill 目录**|`\.agents\skills\`|`\.claude\skills\`|
+|**调用命令**|`$mars3d-skill`|`/mars3d-skill`|
+|开发公司|OpenAI|Anthropic|
+|核心模型|GPT/o 系列代码专项版|Claude Sonnet/Opus/Haiku|
+|运行特点|云端沙盒、并行多任务、安全严格|本地终端优先、深度项目理解|
+|适合人群|全平台、多任务、注重安全|习惯命令行、大型项目、复杂调试|
+|token 消耗|相对更低、更精简|内容更详细，消耗偏高|
+|生态侧重|ChatGPT+云端工程|终端+本地项目+Skill 扩展|
+
+
 
   
 
@@ -153,11 +167,7 @@ D:\mars3d-vue-project\
 ```
  
 
-### （可选）快捷安装方式
-如果您不想上面的一步步操作，也你可以让 Claude Code 帮助您安装，参考下面图片：
-
-![agent-install](http://mars3d.cn/docs/img/guide/skill-claude-autoinstall.jpg) 
-
+ 
 
 
 ## 常见问题解答（小白必看）
