@@ -193,7 +193,7 @@ D:\mars3d-vue-project\
 
 ## 最新教程
 
-最新更详细教程请参考：[官网教程文档](https://mars3d.cn/docs/guide/skill)
+最新更详细教程请参考：[官网教程文档](http://mars3d.cn/docs/guide/skill)
 
 
 
