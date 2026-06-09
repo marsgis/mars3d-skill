@@ -6,29 +6,29 @@
 
 1. 代码或问题中有明确 class/enum 时，按 URL Patterns 生成完整官方 API URL。
 2. 只有功能描述时，先用下方分类索引选择最可能的 class，再生成 URL。
-3. 如果页面不存在、页面版本和 installed package 不一致，回到 `https://mars3d.cn/api/` 搜索，并以 installed declarations 为准。
+3. 如果页面不存在、页面版本和 installed package 不一致，回到 `http://mars3d.cn/api/` 搜索，并以 installed declarations 为准。
 
 ## URL Patterns / URL 规则
 
 Class page:
 
-`https://mars3d.cn/api/{ClassName}.html`
+`http://mars3d.cn/api/{ClassName}.html`
 
 取完整命名空间最后一段作为 `{ClassName}`：
 
-- `mars3d.Map` -> `Map` -> `https://mars3d.cn/api/Map.html`
-- `new mars3d.graphic.PointEntity(...)` -> `PointEntity` -> `https://mars3d.cn/api/PointEntity.html`
-- `mars3d.layer.GeoJsonLayer` -> `GeoJsonLayer` -> `https://mars3d.cn/api/GeoJsonLayer.html`
+- `mars3d.Map` -> `Map` -> `http://mars3d.cn/api/Map.html`
+- `new mars3d.graphic.PointEntity(...)` -> `PointEntity` -> `http://mars3d.cn/api/PointEntity.html`
+- `mars3d.layer.GeoJsonLayer` -> `GeoJsonLayer` -> `http://mars3d.cn/api/GeoJsonLayer.html`
 
 Enum/global page:
 
-`https://mars3d.cn/api/global.html#{Name}`
+`http://mars3d.cn/api/global.html#{Name}`
 
 取最后一段作为 `{Name}`：
 
-- `mars3d.EventType` -> `EventType` -> `https://mars3d.cn/api/global.html#EventType`
-- `LayerType` -> `LayerType` -> `https://mars3d.cn/api/global.html#LayerType`
-- `CRS` -> `CRS` -> `https://mars3d.cn/api/global.html#CRS`
+- `mars3d.EventType` -> `EventType` -> `http://mars3d.cn/api/global.html#EventType`
+- `LayerType` -> `LayerType` -> `http://mars3d.cn/api/global.html#LayerType`
+- `CRS` -> `CRS` -> `http://mars3d.cn/api/global.html#CRS`
 
 下方分类索引中的 PascalCase 名称默认都是 `{ClassName}`。`EventType`、`LayerType`、`GraphicType`、`MaterialType`、`CRS`、`ChinaCRS`、`TerrainType`、`ThingType`、`EffectType`、`ControlType` 等属于 enum/global。小写字段、事件名和报错词只是搜索关键词，不要直接拼 class page URL。
 
@@ -44,7 +44,7 @@ Enum/global page:
 
 ## Common Layers / 常见图层
 
-用户问“加载某类数据/服务/图层”时，从这里选择 class page。每个名称都按 `https://mars3d.cn/api/{ClassName}.html` 查找。
+用户问“加载某类数据/服务/图层”时，从这里选择 class page。每个名称都按 `http://mars3d.cn/api/{ClassName}.html` 查找。
 
 - Terrain and tiles: `TerrainLayer`、`XyzLayer`、`WmsLayer`、`WmtsLayer`、`ArcGisLayer`、`ArcGisTileLayer`、`TdtDmLayer`。
 - Vector data: `GraphicLayer`、`GeoJsonLayer`、`CzmGeoJsonLayer`、`KmlLayer`、`CzmlLayer`、`WfsLayer`、`Wfs2Layer`、`ArcGisWfsLayer`。

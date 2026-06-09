@@ -5,7 +5,7 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
 
 # Mars3D API
 
-使用这个 skill 时，优先参考 Mars3D 开发者中心 (`https://mars3d.cn/docs/`) 和 API 文档 (`https://mars3d.cn/api/`)。
+使用这个 skill 时，优先参考 Mars3D 开发者中心 (`http://mars3d.cn/docs/`) 和 API 文档 (`http://mars3d.cn/api/`)。
 
 ## 工作流程
 
@@ -31,7 +31,7 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
    - CDN临时演示集成、远程script资源引入：`references/integration-cdn.md`
    - Vue practical engineering patterns、reactive id storage、table-map synchronization：`references/vue-engineering-practices.md`
    - Mars3D Vue widget detection、page-map separation、`index.vue` plus `map.ts` widget patterns：`references/widget-patterns.md`
-   - 当代码或任务出现具体 Mars3D class/enum，并需要查官方 API 页面时，加载 `references/api-navigation.md`。例如用户使用 `new mars3d.graphic.PointEntity` 且需要参考 `PointEntity` API，该 reference 会说明取 `PointEntity` 作为 `{ClassName}`，访问 `https://mars3d.cn/api/PointEntity.html`。
+   - 当代码或任务出现具体 Mars3D class/enum，并需要查官方 API 页面时，加载 `references/api-navigation.md`。例如用户使用 `new mars3d.graphic.PointEntity` 且需要参考 `PointEntity` API，该 reference 会说明取 `PointEntity` 作为 `{ClassName}`，访问 `http://mars3d.cn/api/PointEntity.html`。
    - code templates：`references/coding-patterns.md`
 7. 优先使用 Mars3D abstractions，而不是直接使用 raw Cesium：`mars3d.Map`、`mars3d.layer.*`、`mars3d.graphic.*`、`mars3d.thing.*`、`mars3d.EventType`、`mars3d.LayerUtil`、`mars3d.GraphicUtil` 和 `mars3d.MaterialUtil`。
 
@@ -41,8 +41,8 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
 
 - 本地已安装 SDK files 和 type declarations。
 - 现有项目代码、`config.json`、examples 和 templates。
-- `https://mars3d.cn/docs/` 下的 Mars3D Developer Center docs。
-- `https://mars3d.cn/api/` 下的 Official API pages。
+- `http://mars3d.cn/docs/` 下的 Mars3D Developer Center docs。
+- `http://mars3d.cn/api/` 下的 Official API pages。
 - docs 链接的 official examples，例如 editor pages，仅用于参考 usage patterns。
 
 当用户询问 current 或 latest behavior 时，重新检查 online docs 或 installed package。Mars3D options、plugins 和 Cesium integration details 会随版本变化。
