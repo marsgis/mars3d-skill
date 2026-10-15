@@ -211,7 +211,8 @@ D:\mars3d-vue-project\
 
 - Mars3D 开源项目列表：[https://github.com/marsgis/mars3d](https://github.com/marsgis/mars3d)
 
-## 版权说明
+## 📄 开源协议 / License
 
-1. Mars3D 平台由[mars3d团队](http://mars3d.cn/)自主研发，拥有所有权利。
-2. 任何个人或组织可以在遵守相关要求下可以免费无限制使用。
+本仓库（**mars3d-skill**）为 AI 辅助技能包，内容以文档与配置为主，基于 **Apache License 2.0** 开源，可自由使用、复制、修改与分发（含商业用途）。
+
+**请注意**：Mars3D SDK 是独立授权的产品，其授权条款与本仓库相互独立。使用 Mars3D SDK 时请遵守其授权条款（社区免费版：Apache-2.0 ＋ 附加条款，须保留页面 Logo 与 F12 控制台版权信息；商业授权版：可去除署名），详见 <https://mars3d.cn>；购买商业授权：<https://mall.marsgis.cn>
