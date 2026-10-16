@@ -1,6 +1,6 @@
 
 ## 什么是 mars3d-skill？
-mars3d-skill是专门为Mars3D平台使用打造的 AI 辅助技能包，能帮你解决项目开发、集成、调试中的各类问题（比如地图空白、打包失败、API 使用错误等），尤其适配 Vue/ES5 技术栈和Vue通用项目模版(widget 机制)，让 AI 生成的代码更贴合 Mars3D 官方规范和工程最佳实践。
+mars3d-skill 是面向 Mars3D 的 AI 辅助技能包，可帮助分析和修改项目代码、集成 SDK、排查地图空白或 API 使用问题。它包含 Vue/ES5 工程实践、Vue widget 模式和常见 Mars3D API 代码模式。
 
 ### 主要能力
 - 分析和修改 Mars3D 项目代码。
@@ -18,10 +18,11 @@ mars3d-skill是专门为Mars3D平台使用打造的 AI 辅助技能包，能帮�
  
 
 ## 准备工作
-在开始使用前，请先确认：
-1. 你已经有一个 Mars3D 项目，下面我们已 [mars3d-vue-project项目](https://gitee.com/marsgis/mars3d-vue-project)为例；
-2. 已安装 Codex 或 Claude Code（二选一即可，下文会分别讲解）；
-3. 网络正常，能下载 GitHub/Gitee 上的代码。
+开始使用前，请准备：
+1. 已安装支持 Agent Skills 的 Codex 或 Claude Code（下文分别说明）；
+2. 一个 Mars3D 项目（可选，下面以 [mars3d-vue-project](https://gitee.com/marsgis/mars3d-vue-project) 为例）。
+
+也可以先安装 skill，再在之后打开 Mars3D 项目使用。
 
 ### 下载代码
 - [Github](https://github.com/marsgis/mars3d-skill)
@@ -36,25 +37,14 @@ git clone https://github.com/marsgis/mars3d-skill.git
 git clone https://gitee.com/marsgis/mars3d-skill.git
 ```
 
-下面2个方式的对比：
-
-|对比项|Codex（OpenAI）|Claude Code（Anthropic）|
-|---|---|---|
-|**skill 目录**|`\.agents\skills\`|`\.claude\skills\`|
-|**调用命令**|`$mars3d-skill`|`/mars3d-skill`|
-|开发公司|OpenAI|Anthropic|
-|核心模型|GPT/o 系列代码专项版|Claude Sonnet/Opus/Haiku|
-|运行特点|云端沙盒、并行多任务、安全严格|本地终端优先、深度项目理解|
-|适合人群|全平台、多任务、注重安全|习惯命令行、大型项目、复杂调试|
-|token 消耗|相对更低、更精简|内容更详细，消耗偏高|
-|生态侧重|ChatGPT+云端工程|终端+本地项目+Skill 扩展|
+本仓库同时提供 Codex 和 Claude Code 的安装说明。两个工具的配置目录和调用方式不同，具体行为及计费请以各自官方文档和账户设置为准。
 
 
 
   
 
 ## 方式一：在 Codex 中使用
-Codex 是 OpenAI 推出的 AI 编程智能体，前身是 GitHub Copilot 底层代码模型，现在是面向软件工程的全流程自动化助手。
+Codex 是 OpenAI 提供的编程智能体，支持通过 Agent Skills 扩展工作流。
 - [Codex skills 介绍](https://developers.openai.com/codex/skills)
 
 
@@ -62,9 +52,9 @@ Codex 是 OpenAI 推出的 AI 编程智能体，前身是 GitHub Copilot 底层�
 
 1. 找到你的 Mars3D 项目根目录（比如 `D:\mars3d-vue-project\`）；
 
-2. 在项目根目录下，依次新建文件夹：`.agents` → `skills`（注意 `.agents` 前面有个点）,完成后目录为`D:\mars3d-vue-project\.agents\skills\`；
+2. 在项目根目录下创建 `.agents/skills/`（注意 `.agents` 前面有点），例如 `D:\mars3d-vue-project\.agents\skills\`；
 
-3. 把下载好的 `mars3d-skill` 文件夹（里面包含SKILL.md、references等），完整复制到 `\.agents\skills\` 目录下。
+3. 将仓库内容复制到 `.agents/skills/mars3d-skill/`，确认 `SKILL.md` 位于该目录根部，`references/` 和 `agents/` 等文件夹也一并复制。
 
 最终你的项目结构应该是这样（对照看，确保没错）：
 
@@ -96,7 +86,7 @@ D:\mars3d-vue-project\
     ```
 >Codex的调用名`$mars3d-skill`来自 `SKILL.md` 里的 `name: mars3d-skill`
 
-4. 如果 skill 没出现在选择器里，重启 Codex 即可。
+4. 如果 skill 没有出现，先确认当前打开的是包含 `.agents/skills/mars3d-skill/SKILL.md` 的项目，并检查目录层级和文件名；再按 Codex 当前版本的说明刷新或重新打开项目。
   
 ![codex使用步骤](http://mars3d.cn/docs/img/guide/skill-codex-start.jpg)
 
@@ -115,15 +105,15 @@ $mars3d-skill 帮我新增一个 Mars3D widget，点击按钮后在地图上绘�
 
 
 ## 方式二：在 Claude Code 中使用
-Claude Code 是 Anthropic 公司基于 Claude 大模型打造的 AI 编程智能体，主打深度理解项目、终端原生工作流。
+Claude Code 是 Anthropic 提供的编程智能体，支持通过项目级 skills 扩展工作流。
 - [Claude Code skills 介绍](https://docs.claude.com/en/docs/claude-code/skills)
 
 ### 一. 把 skill 复制到项目指定目录
 1. 找到你的 Mars3D 项目根目录（比如 `D:\mars3d-vue-project\`）；
 
-2. 在项目根目录下，依次新建文件夹：`.claude` → `skills`（注意 `.claude` 前面有个点）,完成后目录为`D:\mars3d-vue-project\.claude\skills\`；
+2. 在项目根目录下创建 `.claude/skills/`（注意 `.claude` 前面有点），例如 `D:\mars3d-vue-project\.claude\skills\`；
 
-3. 把下载好的 `mars3d-skill` 文件夹，完整复制到 `.claude/skills` 目录下。
+3. 将仓库内容复制到 `.claude/skills/mars3d-skill/`，确认 `SKILL.md` 位于该目录根部，`references/` 等文件夹也一并复制。
 
 最终你的项目结构应该是这样：
 ```Plain Text
@@ -173,15 +163,13 @@ D:\mars3d-vue-project\
 ## 常见问题解答（小白必看）
  
 ### Q1：复制文件夹后，AI 没识别到 skill 怎么办？
-- 检查文件夹路径是否正确（比如 Codex 是 `.agents/skills/mars3d-skill`，Claude 是 `.claude/skills/mars3d-skill`）；
-- 确保 `mars3d-skill` 文件夹里包含 `SKILL.md` 和 `references` 目录，不要只复制单个文件；
-- 重启 Codex/Claude Code，并重进项目目录。
+- 检查 skill 是否位于工具支持的目录，且 `SKILL.md` 是否在 `mars3d-skill` 目录根部；
+- 确认整个目录都已复制，而不只是 `SKILL.md`；
+- 确认工具当前打开的是正确项目，再按该工具当前版本的说明刷新 skills 或重新打开项目。
 
 
 ### Q2：使用 skill 会额外收费吗？
-- skill 本身免费，AI 平台（Codex/Claude Code）会按 token 消耗计费（比如 Claude Code 用 deepseek-v4-flash 模型，三次测试仅花费 0.22 元，费用受需求难度影响）。
-
-![价格](http://mars3d.cn/docs/img/guide/skill-token-price.jpg)
+- skill 文件本身不收取费用。模型使用、订阅或 API 费用取决于所用平台、账户方案和模型，请查看对应平台的当前计费说明。
 
 
 ### Q3：skill 能解决哪些问题？
@@ -215,4 +203,4 @@ D:\mars3d-vue-project\
 
 本仓库（**mars3d-skill**）为 AI 辅助技能包，内容以文档与配置为主，基于 **Apache License 2.0** 开源，可自由使用、复制、修改与分发（含商业用途）。
 
-**请注意**：Mars3D SDK 是独立授权的产品，其授权条款与本仓库相互独立。使用 Mars3D SDK 时请遵守其授权条款（社区免费版：Apache-2.0 ＋ 附加条款，须保留页面 Logo 与 F12 控制台版权信息；商业授权版：可去除署名），详见 <https://mars3d.cn>；购买商业授权：<https://mall.marsgis.cn>
+**请注意**：Mars3D SDK 是独立授权的产品，其授权条款与本仓库相互独立。使用 Mars3D SDK 时请遵守其授权条款（社区免费版：Apache-2.0 ＋ 附加条款，须保留页面 Logo 与 F12 控制台版权信息；商业授权版：可去除署名），详见 <http://mars3d.cn>；购买商业授权：<http://mars3d.cn/buy.html>

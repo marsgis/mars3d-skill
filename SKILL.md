@@ -12,7 +12,7 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
 1. 先判断任务类型。
 2. 如果任务是普通功能开发、代码修改、API 解释、类用法、图层/矢量/控件/效果实现时，直接基于现有项目代码、本地声明文件和对应 reference 工作，如果是vue技术栈，加载`references/vue-engineering-practices.md`；如果使用了widget机制，`index.vue` 和 `map.ts` widget patterns，加载`references/widget-patterns.md`。
 
-   **注意：** 如果用户的问题属于"参数没起作用"或"调用报错"（即 Step 5 的覆盖范围），则 Step 5 **优先级高于 Step 2**，直接进入 Step 5 加载 `api-errors.md`，不要用 Step 2 的处理方式。
+   **注意：** 如果用户的问题属于“参数没起作用”或“调用报错”，优先加载 `references/api-errors.md`。该排错流程与普通功能开发流程互斥；仅执行与当前问题相关且能取得证据的步骤。
 3. 只有用户询问安装、集成、升级、打包失败、地图空白/不显示、Cesium 资源报错、`mars3d-cesium` 冲突、webpack/vue-cli/vite 配置异常、静态文件或 CDN 引入失败时，才进入集成排查流程。
 4. 进入集成排查流程后，先加载 `references/integration.md`，检查本地版本和集成方式：`package.json`、lockfiles、`node_modules/mars3d`、`node_modules/mars3d-cesium`、`mars3d.d.ts`、入口 HTML 和构建配置。识别为 npm、静态文件或 CDN 集成后，再按需加载 `integration-npm.md`、`integration-static.md` 或 `integration-cdn.md`。
 5. 当用户使用mars3d当中的某一个api，但是其中的参数没有起作用，或者设置了某个参数但是报错，比如：
@@ -21,7 +21,7 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
    ```
    设置了map.keyboardRoam = true，但是没有效果，或者报错，此时需要加载`references/api-errors.md`。
 
-   **重要：必须严格遵守 `api-errors.md` 中的排查步骤，逐条执行，每步完成后确认再进入下一步。禁止跳过其中任何子步骤（如"版本没有问题，但仍然报错"中的 1-9 条），禁止在未走完排查流程前自行查阅类型声明文件或源码来下结论。类型声明和源码只能用于确认步骤中需要的信息，不能替代排查步骤本身。**
+   **排查要求：** 按 `api-errors.md` 的顺序检查并记录证据；可一次完成彼此独立的检查，不必每一步都暂停等待用户确认。只有缺少必要信息、需要用户执行操作或结果会改变后续路径时，才向用户提问。结合本地项目、已安装版本、类型声明、官方文档和示例交叉验证，不要把单一来源当作最终结论。
 
 
 6. 按任务选择对应 reference：
@@ -47,7 +47,7 @@ description: "构建、修改、调试、解释和集成 Mars3D Web GIS 应用�
 
 当用户询问 current 或 latest behavior 时，重新检查 online docs 或 installed package。Mars3D options、plugins 和 Cesium integration details 会随版本变化。
 
-**例外：当触发 Step 5（参数没起作用/调用报错）时，上述来源优先级不适用。必须严格按照 `api-errors.md` 的排查流程执行，不得在走完完整排查步骤前使用类型声明或源码来推断结论。**
+**排错时：** 先按 `api-errors.md` 缩小问题范围，再按本节来源顺序核验。类型声明和源码可用于核对当前安装版本的实际行为；结论需说明证据来源及其适用版本。
 
 ## 实现规则
 

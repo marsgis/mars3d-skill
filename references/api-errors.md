@@ -38,17 +38,15 @@ graphicLayer.show = false
 
 ## 版本没有问题，但仍然报错
 
-1. 询问用户是否已经下载官方示例代码 `mars3d-vue-example`。
+1. 先检查当前项目、工作区和已提供的示例中是否有相关用法。
 
-2. 如果用户没有下载，建议先下载官方示例仓库：
+2. 如果没有可用示例，说明可参考官方示例仓库 `mars3d-vue-example`；仅在需要从该仓库查找具体示例且本地无法访问时，再请用户提供仓库路径或下载。
 
 ```bash
 git clone git@gitee.com:marsgis/mars3d-vue-example.git
 ```
 
-3. 如果用户已经下载，让用户提供示例仓库的本地地址，例如 `E:\temp\mars3d-vue-example`。
-
-4. 得到本地地址后，调用工具在该仓库中搜索目标 api。优先搜索完整构造语句，例如：
+3. 在可访问的示例仓库中搜索目标 API。优先搜索完整构造语句，例如：
 
 ```powershell
 rg -n "new mars3d\.graphic\.PolylineEntity" "E:\temp\mars3d-vue-example"
@@ -70,7 +68,7 @@ rg -n "new mars3d\.graphic\.PolylineEntity" "E:\temp\mars3d-vue-example"
 
 8. 如果示例差异会影响用户问题，需要分别保留。比如 `materialType` 不同、图层类型不同、是否启用编辑/聚合/事件不同、生命周期写法不同，不能合并成一份。
 
-9. 整理完成后，不要直接把全部示例强行加载进上下文。先把整理好的内容、来源路径和精简后的上下文告诉用户大小，让用户判断是否需要加载进入上下文。
+9. 只引用与问题有关的精简示例，并标明文件路径、功能目录和关键上下文；无需预先征求用户是否加载材料，也不要把无关示例全部带入分析。
 
 ## 当直接示例不存在时：从其他 API 借用法模式组合生成测试代码
 
